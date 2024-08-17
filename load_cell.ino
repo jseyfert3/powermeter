@@ -1,8 +1,7 @@
 /**
  * Force and load cell-specific code and helpers. HX711 chip.
  */
-//#include "HX711.h"
-#include "Adafruit_HX711.h"
+#include "HX711.h"
 
 // This offset value is obtained by calibrating the scale with known
 // weights, currently manually with a separate sketch.

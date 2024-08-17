@@ -35,8 +35,8 @@ void bleSetup() {
   Bluefruit.setName(DEV_NAME);
 
   // Set the connect/disconnect callback handlers
-  Bluefruit.setConnectCallback(connectCallback);
-  Bluefruit.setDisconnectCallback(disconnectCallback);
+  Bluefruit.Periph.setConnectCallback(connectCallback);
+  Bluefruit.Periph.setDisconnectCallback(disconnectCallback);
 
   // off Blue LED for lowest power consumption
   Bluefruit.autoConnLed(false);
@@ -113,7 +113,7 @@ void setupPwr(void) {
   // 4 total bytes, 2 16-bit values
   pwrMeasChar.setFixedLen(4);
   // Optionally capture Client Characteristic Config Descriptor updates
-  pwrMeasChar.setCccdWriteCallback(cccdCallback);
+  //pwrMeasChar.setCccdWriteCallback(cccdCallback);  // seems to cause issues
   pwrMeasChar.begin();
 
   /*
@@ -268,7 +268,9 @@ void blePublishLog(const char* fmt, ...) {
 
 void connectCallback(uint16_t connHandle) {
   char centralName[32] = { 0 };
-  Bluefruit.Gap.getPeerName(connHandle, centralName, sizeof(centralName));
+  // gap was removed LONG time ago, in 0.10.1
+  //Bluefruit.Gap.getPeerName(connHandle, centralName, sizeof(centralName));
+  Bluefruit.getName(centralName, sizeof(centralName));
 
   // Light up our 'connected' LED
   digitalWrite(LED_PIN, 1);
@@ -297,22 +299,23 @@ void disconnectCallback(uint16_t connHandle, uint8_t reason) {
 #endif
 }
 
-void cccdCallback(BLECharacteristic& chr, uint16_t cccdValue) {
-#ifdef DEBUG
-  // Display the raw request packet
-    Serial.printf("CCCD Updated: %d\n", cccdValue);
+// below seems to cause issues
+// void cccdCallback(BLECharacteristic& chr, uint16_t cccdValue) {
+// #ifdef DEBUG
+//   // Display the raw request packet
+//     Serial.printf("CCCD Updated: %d\n", cccdValue);
 
-  // Check the characteristic this CCCD update is associated with in case
-  // this handler is used for multiple CCCD records.
-  if (chr.uuid == pwrMeasChar.uuid) {
-    if (chr.notifyEnabled()) {
-      Serial.println("Pwr Measurement 'Notify' enabled");
-    } else {
-      Serial.println("Pwr Measurement 'Notify' disabled");
-    }
-  }
-#endif
-}
+//   // Check the characteristic this CCCD update is associated with in case
+//   // this handler is used for multiple CCCD records.
+//   if (chr.uuid == pwrMeasChar.uuid) {
+//     if (chr.notifyEnabled()) {
+//       Serial.println("Pwr Measurement 'Notify' enabled");
+//     } else {
+//       Serial.println("Pwr Measurement 'Notify' disabled");
+//     }
+//   }
+// #endif
+// }
 
 /*
  * Given a 16-bit uint16_t, convert it to 2 8-bit ints, and set
