@@ -8,7 +8,8 @@
 #include <SPI.h>
 
 #include "MPU6050.h"
-#include "HX711.h"
+//#include "HX711.h"
+#include "Adafruit_HX711.h"
 
 // Trek
 //#define DEBUG
