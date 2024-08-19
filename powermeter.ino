@@ -11,7 +11,7 @@
 #include "HX711.h"
 
 // Trek
-//#define DEBUG
+#define DEBUG
 //#define BLE_LOGGING
 //#define CALIBRATE
 #define DISABLE_LOGGING  // to the SD
@@ -22,7 +22,7 @@
 #define GYRO_OFFSET -31
 // Hooked up the wires backwards apparently, force is negated.
 // If it isn't, just set to 1.
-#define HOOKEDUPLOADBACKWARDS -1
+#define HOOKEDUPLOADBACKWARDS 1
 #define DEV_NAME "JrvsPwr"
 
 /*
@@ -86,6 +86,8 @@ HX711 load;
 void setup() {
   Wire.begin();
   Serial.begin(115200);
+  delay(1000); // without delay the booted for debugging would not print
+  Serial.println("Booted!"); //for debugging
 
   // Setup, calibrate our other components
   gyroSetup();

@@ -22,8 +22,9 @@
 #define NUM_RAW_SAMPLES 1
 
 // Pins we're using.
-#define EXCIT_POS A0
-#define EXCIT_NEG A1
+// I had to swap these as I soldered them backwards...
+#define EXCIT_POS A1
+#define EXCIT_NEG A0
 
 void loadSetup() {
   // 'load' is declared in power.ini
